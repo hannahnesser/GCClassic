@@ -1,3 +1,7 @@
+.. |br| raw:: html
+
+   <br/>
+
 .. _quick:
 
 ################
@@ -87,6 +91,15 @@ scanning the output for tag.
 2. Create a run directory
 =========================
 
+.. important::
+
+   The first time you create a run directory, you will be asked to
+   provide :ref:`registration information <rundir-registration>`.
+   Please answer all of the questions, as it will help us to keep
+   track of GEOS-Chem usage worldwide.  We will also add your
+   information to the `GEOS-Chem Users web page
+   <https://geoschem.github.io/users.html>`_.
+
 Navigate to the :file:`run/` subdirectory.  To :ref:`create a run
 directory <rundir>`, run the script :file:`./createRunDir.sh`:
 
@@ -110,29 +123,43 @@ time.
 
 For demonstration purposes, we will use a full chemistry simulation
 run directory with the default name (:file:`gc_merra2_4x5_fullchem`).
-The steps to setup and run other types of GEOS-Chem simulations follow
-the same pattern as the examples shown below.
+The steps to setup and run other types of GEOS-Chem Classic
+simulations follow the same pattern as the examples shown below.
 
 .. attention::
 
-   The first time you create a run directory, you will be asked to
-   provide :ref:`registration information <rundir-registration>`.
-   Please answer all of the questions, as it will help us to keep
-   track of GEOS-Chem usage worldwide.  We will also add your
-   information to the `GEOS-Chem People and Projects web page
-   <https://geoschem.github.io/people.html>`_.
+   The convection scheme used to generate archived GEOS-FP meteorology
+   files changed from RAS to Grell-Freitas starting 01 June 2020 with
+   impact on vertical transport. Discussion and analysis of the impact
+   is available at
+   https://github.com/geoschem/geos-chem/issues/1409.
+
+   To fix this issue, different GEOS-Chem convection schemes are
+   called based on simulation start time. This ensures comparability
+   in GEOS-Chem runs using GEOS-FP fields generated using the RAS
+   convection scheme and fields generated using Grell-Freitas, but
+   only if the simulation does not cross the 01 June 2020 boundary. We
+   therefore recommend splitting up GEOS-FP runs in time such that a
+   single simulation does not span this date. For example, configure
+   one run to end on 01 June 2020 and then use  its output restart to
+   start another run on 01 June 2020.. Alternatively consider using
+   MERRA2 which was entirely generated with RAS, or GEOS-IT which was
+   entirely generated with Grell-Freitas. If you wish to use a GEOS-FP
+   meteorology year different from your simulation year please create
+   a GEOS-Chem GitHub issue for assistance to avoid accidentally using
+   zero convective precipitation flux.
 
 .. _quick-load:
 
 ========================
-3. Load your Environment
+3. Load your environment
 ========================
 
-Prior to building GEOS-Chem always make sure all libraries and
-environment variables are loaded.  An easy way to do this is to write
-an :ref:`environment file <env>` and load that file every time you
-work with GEOS-Chem.  To make this extra easy you can create a
-symbolic link to your environment file within your run directory or
+Always make sure that all libraries and environment variables are
+loaded prior to building GEOS-Chem Classic.  An easy way to do this is
+to write an :ref:`environment file <env>` and load that file every
+time you work with GEOS-Chem.  To make this extra easy you can create
+a symbolic link to your environment file within your run directory or
 for reference.  For example, do the following in your new run
 directory to have a handy link to the environment you plan on using.
 
@@ -154,12 +181,12 @@ run directory you can easily load your environment.
 4. Configure your build
 =======================
 
-You may build GEOS-Chem from within the run directory or from anywhere
-else on your system.  But we recommend that you always build GEOS-Chem
-from within the run directory.  This is convenient because it keeps
-all build files in close proximity to where you will run the model.
-For this purpose the GEOS-Chem run directory includes a build
-directory called :file:`build/`.
+You may build GEOS-Chem Classic from within the run directory or from
+anywhere else on your system.  But we recommend that you always build
+GEOS-Chem Classic from within the run directory.  This is convenient
+because it keeps all build files in close proximity to where you will
+run the model. For this purpose the GEOS-Chem run directory includes a
+build directory called :file:`build/`.
 
 First, navigate to the :file:`build/` folder of your run directory:
 
@@ -209,8 +236,8 @@ where the error happened and why.
 
    $ cmake . -DCMAKE_BUILD_TYPE=Debug
 
-See the :ref:`GEOS-Chem documentation <compile-cmake>` for more
-information on configuration options.
+:ref:`Click here <compile-cmake>` for more information on
+configuration options.
 
 .. _quick-cmp-inst:
 
@@ -226,7 +253,7 @@ with the :literal:`-j` flag from the :file:`build/` directory:
 
 .. code-block:: console
 
-   # cd /path/to/gc_4x5_merra2_fullchem/build   # Skip if you are already here
+   $ cd /path/to/gc_4x5_merra2_fullchem/build   # Skip if you are already here
    $ make -j
 
 Upon successful compilation, install the compiled executable to your
@@ -270,7 +297,7 @@ You should review these files before starting a simulation:
    - Controls several frequently-updated simulation settings
      (e.g. start and end time, which operations to turn on/off, etc.)
 
-- :ref:`HISTORY.rc <cfg-hist>`
+- :ref:`HISTORY.rc <histguide-configfile>`
    - Controls GEOS-Chem diagnostic settings.
 
 - :ref:`HEMCO_Diagn.rc <cfg-hco-diagn>`
@@ -278,20 +305,126 @@ You should review these files before starting a simulation:
 
 - :ref:`HEMCO_Config.rc <cfg-hco-cfg>`
    - Controls which emissions inventories and other non-emissions data
-     will be read from disk (via `HEMCO <https://hemco.readthedocs.io>`_).
+     will be read from disk (via `HEMCO
+     <https://hemco.readthedocs.io>`_).
+
+.. attention::
+
+   If you wish to spin up a GEOS-Chem simulation with a restart file
+   that has (1) missing species or (2) a timestamp that does not
+   match the start date in :ref:`geoschem_config.yml <cfg-gc-yml>`,
+   simply change the time cycle flag for the :literal:`SPC_` entry in
+   :ref:`HEMCO_Config.rc <cfg-hco-cfg>` from
+
+   .. code-block:: console
+
+      * SPC_ ... $YYYY/$MM/$DD/$HH EFYO xyz 1 * - 1 1
+
+   to
+
+   .. code-block:: console
+
+      * SPC_ ... $YYYY/$MM/$DD/$HH CYS xyz 1 * - 1 1
+
+   This will direct HEMCO to read the closest date
+   available (:literal:`C`), to use the simulation year
+   (:literal:`Y`),  and to skip any species (:literal:`S`) not found
+   in the restart file.
+
+   Skipped species will be assigned the initial concentration
+   (units: :math:`mol\ mol^{-1}` w/r/t dry air) specified by its
+   :option:`BackgroundVV` entry in :ref:`species_database.yml
+   <cfg-spec-db>`.   If the species does not have a
+   :option:`BackgroundVV` value specified, then its initial
+   concentration will be set to :math:`1.0{\times}10^{-20}`
+   instead.
 
 Please see our :ref:`customguide` Supplemental Guide to learn how you
 can customize your simulation by activating alternate science options
 in your simulations.
 
-Once you are satisfied that your simulation settings are correct, you
-may proceed to run GEOS-Chem.
+.. _quick-dry-download:
+
+======================
+7. Download input data
+======================
+
+Before you can run your GEOS-Chem Classic simulation, you must first
+:ref:`download the required input data <data>`.  These data include:
+
+- :ref:`Meteorological fields <gcid-data-org-met>` (e.g. GEOS-FP,
+  MERRA-2, GEOS-IT, or GCAP2)
+- :ref:`Emissions inventories <gcid-data-org-emis-inputs>`
+- :ref:`Inputs for GEOS-Chem modules (e.g. Cloud-J) <gcid-data-org-chem-inputs>`
+- :ref:`Initial conditions for starting GEOS-Chem simulations <gcid-data-org-init-cond>`
+
+.. tip::
+
+   If your institution has several GEOS-Chem users, then someone may
+   have already downloaded these data for you.  If this is the case,
+   you may :ref:`start running your your GEOS-Chem Classic simulation
+   <quick-run>` right away.
+
+The easiest way to download data is to perform a :ref:`dry-run
+simulation <dry-run>`. This is a GEOS-Chem Classic simulation that
+steps through time, but does not perform computations or read data
+files from disk.  Instead, the dry-run simulation prints a list of all
+data files that the simulation would have read.
+
+To start a dry-run simulation, type this command:
+
+.. code-block:: console
+
+   $ ./gcclassic --dryrun | tee log.dryrun
+
+This will generate the :file:`log.dryrun` log file, which contains the
+list of data files to be downloaded.
+
+Once the dry-run simulation has finished, use the
+:file:`download_data.py` file (included in your run directory) to
+:ref:`download the required data <dry-run-download>`.
+
+.. note::
+
+   Depending on your system, you might have to activate a Conda or
+   Mamba environment containing a version of Python before running the
+   :file:`download.data.py` script.  Ask your sysadmin.
+
+To start the data download, type:
+
+.. code-block:: console
+
+   $ ./download_data.py log.dryrun geoschem+http
+
+This will download data from the :ref:`GEOS-Chem Input Data <gcid>`
+portal using the HTTP data transfer protocol.
+
+.. tip::
+
+   If you have `AWS CLI (command line interface)
+   <https://aws.amazon.com/cli/>`_ installed on your system, you
+   can use this command instead:
+
+   .. code-block:: console
+
+      $ ./download_data.py log.dryrun geoschem+aws
+
+   This will use the AWS CLI data download protocol instead, which
+   should be faster than regular HTTP connections.  This is the
+   command you should use if you are running GEOS-Chem Classic in an
+   AWS EC2 instance.
+
+We also maintain :ref:`separate data portals <gcid-special-portals>`
+for special nested-grid domains as well as the GCAP 2.0 meteorology.
+
+For more information about dry-run simulations, please see our
+:ref:`dry-run` chapter.
 
 .. _quick-run:
 
-========================
-7. Run GEOS-Chem Classic
-========================
+======================
+8. Run your simulation
+======================
 
 If you used an :ref:`environment file <env>` to load software
 libraries prior to building GEOS-Chem then you should load that file

@@ -50,19 +50,6 @@ function(configureGCClassic)
     gc_pretty_print(VARIABLE MECH OPTIONS "fullchem" "carbon" "Hg" "custom")
 
     #-------------------------------------------------------------------------
-    # Turn on bpch diagnostics?
-    #-------------------------------------------------------------------------
-    set(BPCH_DIAG "OFF" CACHE BOOL 
-        "Switch to enable GEOS-Chem's bpch diagnostics"
-    )
-    gc_pretty_print(VARIABLE BPCH_DIAG IS_BOOLEAN)
-    if(${BPCH_DIAG})
-        target_compile_definitions(GEOSChemBuildProperties
-	    INTERFACE BPCH_DIAG
-	)
-    endif()
-
-    #-------------------------------------------------------------------------
     # Set USE_REAL8 as cache variable so as to not override existing definition
     # See https://github.com/geoschem/geos-chem/issues/43.
     #-------------------------------------------------------------------------
@@ -189,6 +176,14 @@ function(configureGCClassic)
     gc_pretty_print(VARIABLE HCOSA IS_BOOLEAN)
 
     #-------------------------------------------------------------------------
+    # Build the KPP-Standalone?
+    #-------------------------------------------------------------------------
+    set(KPPSA OFF CACHE BOOL
+      "Switch to build the KPP-Standalone Box Model"
+    )
+    gc_pretty_print(VARIABLE KPPSA IS_BOOLEAN)
+
+    #-------------------------------------------------------------------------
     # Build Luo et al wetdep scheme?
     # (Currently a research option... turn OFF by default)
     #-------------------------------------------------------------------------
@@ -205,17 +200,23 @@ function(configureGCClassic)
     #-------------------------------------------------------------------------
     # Use Fast-JX rather than Cloud-J?
     #-------------------------------------------------------------------------
-
     set(FASTJX OFF CACHE BOOL
         "Switch to use legacy FAST-JX in GEOS-Chem"
     )
     gc_pretty_print(VARIABLE FASTJX IS_BOOLEAN)
     if(${FASTJX})
+        #---------------------------------------------------------------------
+        # Throw an error unless we are using the Hg mechanism,
+        # The fullchem & custom mechanisms now use Cloud-J!
+        if(NOT ${MECH} MATCHES "Hg")
+          message(FATAL_ERROR "FASTJX can only be used with the Hg mechanism!")
+        endif()
+        #---------------------------------------------------------------------
         target_compile_definitions(GEOSChemBuildProperties
             INTERFACE FASTJX
         )
     endif()
-
+    
     #-------------------------------------------------------------------------
     # Export the following variables to GEOS-Chem directory's scope
     #-------------------------------------------------------------------------

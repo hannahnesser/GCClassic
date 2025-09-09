@@ -6,7 +6,7 @@ Disk space requirements
 
 The following sections will help you assess how much disk space you
 will need on your server to store GEOS-Chem Classic :ref:`input data
-<input-overview>` and :ref:`output data <outfiles>`.
+<data>` and :ref:`output data <outfiles>`.
 
 .. _req-hard-disk-limits:
 
@@ -24,8 +24,8 @@ information.
 Emissions input fields
 ----------------------
 
-Please see our :ref:`Emissions input data <emis-inputs>` section for
-more information.
+Please see our :ref:`Emissions input data <gcid-data-org-emis-inputs>`
+section for more information.
 
 .. _req-hard-disk-met:
 
@@ -96,9 +96,12 @@ sections.
 #. Download and manage data with the :ref:`bashdatacatalog tool
    <bashdatacatalog>`;
 #. Transfer data with `Globus <https://www.globus.org/data-transfer>`_
-   **GEOS-Chem data (WashU)** endpoint>.
+   **GEOS-Chem data (WashU)** endpoint;
+#. Direct FTP access from the `WashU data portal
+   <https://geoschemdata.wustl.edu>`_;
+#. Direct access from the `Amazon data portal using AWS S3 Explorer <https://s3.amazonaws.com/gcgrid/index.html>`_.
 
-Also see our :ref:`input-overview` for more data download options.
+Also see our :ref:`data` chapter for more data download options.
 
 .. _data-generated-by-geos-chem:
 

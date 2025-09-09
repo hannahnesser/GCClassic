@@ -52,9 +52,10 @@ and then follow the prompts.
 --------------------------------------------------------
 
 The :literal:`BoundaryConditions` diagnostic collection is deactivated
-by default in the :ref:`cfg-hist` file that ships with the run
-directory. Activate this collection by removing the comment character
-(:literal:`#`) as shown below.
+by default in the :ref:`HISTORY.rc configuration file
+<histguide-configfile>` that ships with the run directory. Activate
+this collection by removing the comment character (:literal:`#`) as
+shown below.
 
 .. code-block:: none
 
@@ -68,7 +69,8 @@ directory. Activate this collection by removing the comment character
 The :literal:`BoundaryConditions` collection will save out
 instantaneous concentrations of advected species every three hours to
 daily files. You may change those settings by modifying the
-BoundaryConditions collection section in the :ref:`cfg-hist` file.
+BoundaryConditions collection section in the :ref:`HISTORY.rc
+<histguide-configfile>` file.
 
 .. tip::
 
@@ -107,9 +109,9 @@ diagnostic output in :file:`HISTORY.rc` and :file:`HEMCO_Diagn.rc`.
 
 .. tip::
 
-   Turn off most diagnostic output in the :ref:`cfg-hist` and
-   :ref:`cfg-hco-diagn` files.  This will minimize the run time and
-   reduce the size of diagnostic ouptut.
+   Turn off most diagnostic output in the :ref:`HISTORY.rc
+   <histguide-configfile>` and :ref:`cfg-hco-diagn` files.  This will
+   minimize the run time and reduce the size of diagnostic ouptut.
 
 5. Compile GEOS-Chem and run the global simulation
 --------------------------------------------------
@@ -181,7 +183,7 @@ your boundary condition files.
 Activate your preferred diagnostics by changing the relevant settings
 in these configuration files:
 
-#. :ref:`cfg-hist`
+#. :ref:`histguide-configfile`
 #. :ref:`cfg-hco-diagn`
 #. :ref:`Planeflight.dat.YYYYMMDD <planeflight-diagnostic>`
 #. :ref:`The ObsPack menu of geoschem_config.yml <gc-yml-xdiag-obspack>`
@@ -236,11 +238,20 @@ simulations on different nested domains.
 How can I find which data are available for nested grid simulations?
 --------------------------------------------------------------------
 
-You will download meteorology and emissions data from one of the
-:ref:`GEOS-Chem data portals <input-overview>`.  You can browse the
-WashU data portal (`http://geoschemdata.wustl.edu/ExtData
-<http://geoschemdata.wustl.edu/ExtData>`_) to see if the data you need
-are available.
+You can browse the contents of the GEOS-Chem data portals by pointing
+your browser to one of the following links:
+
+- :ref:`GEOS-Chem Input Data <gcid>`
+
+  - https://geos-chem.s3.amazonaws.com/index.html
+
+- :ref:`GEOS-Chem Nested Input Data <gcid-special-portals-nested>`
+
+  -  https://gcgrid.s3.amazonaws.com/index.html
+
+- :ref:`GCAP 2.0 meteorology @ U. Rochester  <gcid-special-portals-gcap2>`
+
+  - http://atmos.earth.rochester.edu/input/gc/ExtData/
 
 .. _nestgrid-faq-errors:
 

@@ -66,8 +66,20 @@ modifications to GEOS-Chem Classic source code.
    gcclassic-user-guide/diagnostics.rst
 
 .. toctree::
+   :caption: GEOS-Chem Simulations
+   :maxdepth: 4
+
+   geos-chem-shared-docs/simulations/aerosol-only.rst
+   geos-chem-shared-docs/simulations/carbon.rst
+   geos-chem-shared-docs/simulations/fullchem.rst
+   geos-chem-shared-docs/simulations/hg.rst
+   geos-chem-shared-docs/simulations/metals.rst
+   geos-chem-shared-docs/simulations/tago3.rst
+   geos-chem-shared-docs/simulations/transport-tracers.rst
+
+.. toctree::
    :caption: Supplemental guides
-   :maxdepth: 1
+   :maxdepth: 4
 
    supplemental-guides/directory-structure.rst
    supplemental-guides/run-script-examples.rst
@@ -77,12 +89,14 @@ modifications to GEOS-Chem Classic source code.
    geos-chem-shared-docs/supplemental-guides/error-guide.rst
    geos-chem-shared-docs/supplemental-guides/debug-guide.rst
    geos-chem-shared-docs/supplemental-guides/bashdatacatalog.rst
+   geos-chem-shared-docs/supplemental-guides/history-diag-guide.rst
    geos-chem-shared-docs/supplemental-guides/netcdf-guide.rst
    geos-chem-shared-docs/supplemental-guides/coards-guide.rst
    geos-chem-shared-docs/supplemental-guides/species-guide.rst
    geos-chem-shared-docs/supplemental-guides/parallel-guide.rst
    supplemental-guides/nested-grid-guide.rst
    geos-chem-shared-docs/supplemental-guides/using-kpp-with-gc.rst
+   geos-chem-shared-docs/supplemental-guides/using-kpp-standalone.rst
    geos-chem-shared-docs/supplemental-guides/related-docs.rst
 
 .. toctree::
@@ -94,3 +108,4 @@ modifications to GEOS-Chem Classic source code.
    help-and-reference/CONTRIBUTING.md
    help-and-reference/SUPPORT.md
    geos-chem-shared-docs/editing_these_docs.rst
+

@@ -13,8 +13,7 @@ will be kept at a secure cloud-based server.
 Even if you are a long-time GEOS-Chem user, we ask that you answer all
 of the questions. Your responses will help us to keep an accurate
 count of GEOS-Chem users and to keep the `list of GEOS-Chem
-users <https://geoschem.github.io/geos-chem-people-projects-map/>`_
-current.
+users <https://geoschem.github.io/users.html>`_ current.
 
 The user registration dialog (and where you will type in your
 repsonses) is shown below.
@@ -76,7 +75,7 @@ repsonses) is shown below.
    >>> type your response and hit ENTER
    Successful Registration
 
-If you do not see the  :literal:`Successful Registraton` message, check
+If you do not see the  :literal:`Successful Registration` message, check
 your internet connection and try again.  If the problem persists,
 `open a new Github issue
 <https://github.com/geoschem/geos-chem/issues/new/choose>`_.

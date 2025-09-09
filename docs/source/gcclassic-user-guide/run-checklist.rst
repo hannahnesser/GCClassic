@@ -18,6 +18,11 @@ all required setup steps before running your simulation.
 First-time setup
 ================
 
+#. If this is your first-time using GEOS-Chem, make sure that you
+   :ref:`registered as a new user <rundir-registration>` when you
+   created the run directory. |br|
+   |br|
+
 #. Make sure that your computational environment meets all of the
    :ref:`hardware <req-hard>` and
    :ref:`software <req-soft>` requirements for GEOS-Chem Classic.
@@ -35,8 +40,7 @@ Each-time setup
 
 #. Create a :ref:`GEOS-Chem Classic run directory <rundir>`,
    and make sure that it is correct for the simulation you wish to
-   perform. |br|
-   |br|
+   perform.
 
    .. attention::
 
@@ -51,21 +55,53 @@ Each-time setup
 
    .. attention::
 
-      Prior to running with :option:`GEOS-FP` met fields, please be
-      aware  of several caveats regarding that data stream. (cf. `The
-      GEOS-FP wiki page <http://wiki.geos-chem.org./GEOS-FP>`_).
+      Be aware that GEOS-FP meteorology is an operational
+      (i.e. evolving) product that is subject to assimilation
+      system updates.
+
+      On the other hand, the MERRA-2 meteorology is a 40+
+      year reanalysis product performed with a "frozen" version of the
+      NASA GEOS assimilation system.  Thus, `MERRA-2
+      <http://wiki.geos-chem.org/MERRA-2>`_ is preferable for studies
+      ranging over multiple years or decades.
+
+   .. attention::
+
+      The convection scheme used to generate archived GEOS-FP
+      meteorology files changed from RAS to Grell-Freitas starting 01
+      June 2020 with impact on vertical transport. Discussion and
+      analysis of the impact is available at
+      https://github.com/geoschem/geos-chem/issues/1409.
+
+      To fix this issue, different GEOS-Chem convection schemes are
+      called based on simulation start time. This ensures
+      comparability in GEOS-Chem runs using GEOS-FP fields generated
+      using the RAS convection scheme and fields generated using
+      Grell-Freitas, but only if the simulation does not cross the 01
+      June 2020 boundary. We therefore recommend splitting up GEOS-FP
+      runs in time such that a single simulation does not span this
+      date. For example, configure one run to end on 01 June 2020 and
+      then use its output restart to start another run on 01 June
+      2020.. Alternatively consider using MERRA2 which was entirely
+      generated with RAS, or GEOS-IT which was entirely generated with
+      Grell-Freitas. If you wish to use a GEOS-FP meteorology year
+      different from your simulation year please create a GEOS-Chem
+      GitHub issue for assistance to avoid accidentally using zero
+      convective precipitation flux.
 
 #. :ref:`Configure and build <compile>` the source code into an
    executable file. |br|
    |br|
 
-#. Copy a sample :ref:`GEOS-Chem Classic run script <run-script>` to
+#. Create a :ref:`GEOS-Chem Classic run script <run-script>` to
    your run directory and edit it for the particulars of your
    simulation and computer system. |br|
    |br|
 
 #. Make sure that your run script contains the proper settings for
-   :ref:`OpenMP parallelization <env-files-envvars-parallel>`. |br|
+   :ref:`OpenMP parallelization <env-files-envvars-parallel>`, either
+   by sourcing an environment file, or by manually adding the settings
+   to the run script. |br|
    |br|
 
 #. Be aware of :ref:`ways in which you can speed up your GEOS-Chem

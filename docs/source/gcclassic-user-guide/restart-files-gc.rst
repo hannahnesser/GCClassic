@@ -72,7 +72,7 @@ to stop with an error if:
    listed in :ref:`geoschem_config.yml <cfg-gc-yml>`.
 
 When reading **other restart file fields** (time cycle flag:
-:code:`EY`). HEMCO will
+:code:`EY`). HEMCO will stop with an error if:
 
 #. The restart file is missing, or
 #. The date in the restart file (which is usually 20190101 or
@@ -134,9 +134,7 @@ Where can I get a restart file for my simulation?
 
 GEOS-Chem Classic :ref:`run directories <rundir>` are configured to
 use sample GEOS-Chem restart files in :program:`netCDF` format.  These
-files are available for download at:
-`http://geoschemdata.wustl.edu/ExtData/GEOSCHEM_RESTARTS/
-<http://geoschemdata.wustl.edu/ExtData/GEOSCHEM_RESTARTS/>`_.
+files are available for download at the :ref:`gcid-data` portal.
 
 .. tip::
 
@@ -152,9 +150,7 @@ your run directory when you :ref:`generate a new GEOS-Chem classic run
 directory <rundir>`.
 
 Monthly GEOS-Chem restart files from the GEOS-Chem 14.0.0 10-year
-benchmark may be found at
-`http://ftp.as.harvard.edu/gcgrid/geos-chem/10yr_benchmarks/14.0.0/GCClassic/restarts
-<http://ftp.as.harvard.edu/gcgrid/geos-chem/10yr_benchmarks/14.0.0/GCClassic/restarts>`_.
+benchmark `may be found here <http://geoschemdata.wustl.edu/ExternalShare/geos-chem/10yr_benchmarks/14.0.0/GCClassic/Restarts/>`_.
 
 .. attention::
 
@@ -175,7 +171,7 @@ simulations.  We recommend ten years for ozone, carbon dioxide, and
 methane simulations, and four years for radon-lead-beryllium
 simulations. If you are in doubt about how long your spin up should be
 for your simulation, we recommend contacting the `GEOS-Chem Working
-Group <http://acmg.seas.harvard.edu/geos/geos_working_groups.html>`_
+Group <https://geoschem.github.io/working-groups.html>`_
 that specializes in your area of research.
 
 You may spin up the model starting at any year for which there is met
@@ -189,9 +185,6 @@ example, if you want to do a production simulation starting on
 GEOS-FP restart file dated 2019/07/01 and then use the new restart
 file to spin up the model for five additional months, from 2019/07/01
 to 2019/12/01.
-
-See also this discussion on our Github page for further guidance:
-https://github.com/geoschem/geos-chem/discussions/911.
 
 .. _restart-files-gc-check:
 
@@ -237,11 +230,6 @@ How are GEOS-Chem restart files written?
 ========================================
 
 GEOS-Chem restart files are now saved via the History component. A
-**Restart collection** has been defined in `HISTORY.rc <history>`_ and
-fields saved out to the restart file can be modified in that file.
-
-For more information, please see our documentation about the `Restart
-collection in GEOS-Chem History diagnostics
-<http://wiki.geos-chem.org/History_collections_for_species_concentrations#The_Restart_collection>`_.
-This documentation is currently on the GEOS-Chem wiki, but will be
-ported to ReadTheDocs in the near future.
+:ref:`Restart collection <histguide-restart>` has been defined in
+:ref:`HISTORY.rc <histguide-configfile>` and fields saved out to the
+restart file can be modified in that file.

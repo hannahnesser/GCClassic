@@ -18,11 +18,6 @@ GEOS-Chem full-chemistry simulation.
 
       $ cd /path/to/your/GCClassic
       $ ls -CF
-
-   You should see this output:
-
-   .. code-block::
-
       AUTHORS.txt     CMakeScripts/    LICENSE.txt  SUPPORT.md  run@  test@
       CMakeLists.txt  CONTRIBUTING.md  README.md    docs/       src/
 
@@ -38,17 +33,10 @@ GEOS-Chem full-chemistry simulation.
 
       $ cd run
       $ ls -CF
-
-   and you should see this output:
-
-   .. code-block:: console
-
-      HEMCO_Config.rc.templates/  geoschem_config.yml.templates/
-      HEMCO_Diagn.rc.templates/   getRunInfo*
-      HISTORY.rc.templates/       gitignore
-      README                      init_rd.sh*
-      archiveRun.sh*              runScriptSamples/
-      createRunDir.sh*
+      archiveRun.sh*                  gitignore                   init_rd.sh*
+      createRunDir.sh*                HEMCO_Config.rc.templates/  README.md
+      geoschem_config.yml.templates/  HEMCO_Diagn.rc.templates/   runScriptSamples/
+      getRunInfo*                     HISTORY.rc.templates/       setupForRestarts.sh*
 
    You can see several folders (highlighted in the directory display with
    :file:`/`) and a few executable scripts (highlighted with :file:`*`).
@@ -77,16 +65,15 @@ GEOS-Chem full-chemistry simulation.
       -----------------------------------------------------------
          1. Full chemistry
          2. Aerosols only
-         3. CH4
-         4. CO2
-         5. Hg
-         6. POPs
-         7. Tagged CH4
-         8. Tagged CO
-         9. Tagged O3
-        10. TransportTracers
-        11. Trace metals
-        12. Carbon
+         3. Carbon
+         4. Hg
+         5. POPs
+         6. Tagged O3
+         7. Trace metals
+         8. TransportTracers
+         9. CH4
+        10. CO2
+        11. Tagged CO
       >>>
 
    To create a run directory for the full-chemistry simulation, type
@@ -128,7 +115,7 @@ GEOS-Chem full-chemistry simulation.
 
 #. You will then be asked to specify the meteorology type for the
    simulation (`GEOS-FP  <http://wiki.geos-chem.org/GEOS_FP>`_, `MERRA-2
-   <http://wiki-geos-chem.org/MERRA-2>`_), or GCAP 2.0):
+   <http://wiki-geos-chem.org/MERRA-2>`_), or GCAP 2.0).
 
    .. code-block:: console
 
@@ -137,12 +124,37 @@ GEOS-Chem full-chemistry simulation.
       -----------------------------------------------------------
         1. MERRA-2 (Recommended)
         2. GEOS-FP
-        3. GISS ModelE2.1 (GCAP 2.0)
+        3. GEOS-IT
+        4. GISS ModelE2.1 (GCAP 2.0)
       >>>
 
    You should use the recommended option (MERRA-2) if possible. Type
-   :command:`1` followed by :command:`ENTER`. |br|
-   |br|
+   :command:`1` followed by :command:`ENTER`.
+
+   .. attention::
+
+      The convection scheme used to generate archived GEOS-FP
+      meteorology files changed from RAS to Grell-Freitas starting 01
+      June 2020 with impact on vertical transport. Discussion and
+      analysis of the impact is available at
+      https://github.com/geoschem/geos-chem/issues/1409.
+
+      To fix this issue, different GEOS-Chem convection schemes are
+      called based on simulation start time. This ensures
+      comparability in GEOS-Chem runs using GEOS-FP fields generated
+      using the RAS convection scheme and fields generated using
+      Grell-Freitas, but only if the simulation does not cross the 01
+      June 2020 boundary. We therefore recommend splitting up GEOS-FP
+      runs in time such that a single simulation does not span this
+      date. For example, configure one run to end on 01 June 2020 and
+      then use its output restart to start another run on 01 June
+      2020.. Alternatively consider using MERRA2 which was entirely
+      generated with RAS, or GEOS-IT which was entirely generated with
+      Grell-Freitas. If you wish to use a GEOS-FP meteorology year
+      different from your simulation year please create a GEOS-Chem
+      GitHub issue for assistance to avoid accidentally using zero
+      convective precipitation flux.
+
 
 #. The next menu will prompt you for the horizontal resolution that
    you wish to use:
@@ -209,17 +221,14 @@ GEOS-Chem full-chemistry simulation.
       -----------------------------------------------------------
       >>>
 
-   You may enter an absolute path (such as :file:`$HOME/myusername/`
+   You may enter an absolute path (e.g. :file:`$HOME/myusername/my-run-dirs`
    followed by :command:`ENTER)`.
 
-   You may also enter a relative path (such as :file:`~/rundirs`
-   followed by ENTER). In this case you will see that the
-   :file:`./createRunDir.sh`  script will expand the path to:
-
-   .. code-block:: console
-
-      Expanding to: /n/home09/myusername/rundirs |br|
-      |br|
+   You may also enter a relative path (e.g :file:`~/my-run-dirs`
+   followed by :command:`ENTER`). In this case you will see that the
+   :file:`./createRunDir.sh`  script will expand the path to an
+   absolute path. |br|
+   |br|
 
 
 #. The next menu will prompt you for the run directory name.
@@ -234,34 +243,34 @@ GEOS-Chem full-chemistry simulation.
       >>>
 
    You should use the default run directory name whenever possible. Type
-   :command:`ENTER` to select the default.
-
-   The script will display the following output:
+   :command:`ENTER` to select the default.  You will then see output
+   similar to this:
 
    .. code-block:: console
 
-         -- Using default directory name gc_4x5_merra2_fullchem
+      -- Using default directory name gc_4x5_merra2_fullchem
 
    or if you are creating a nested grid simulation:
 
    .. code-block:: console
 
-         -- Using default directory name gc_05x0625_merra2_fullchem
+      -- Using default directory name gc_05x0625_merra2_fullchem
 
    and then:
 
    .. code-block:: console
 
-         -- This run directory has been set up for 20190701 - 20190801.
-            You may modify these settings in geoschem_config.yml.
-
-         -- The default frequency and duration of diagnostics is set to monthly.
-            You may modify these settings in HISTORY.rc and
-	    HEMCO_Config.rc.
+      -- See rundir_vars.txt for summary of default run directory settings
+      -- This run directory has been set up to start on 20190701
+      -- A restart file for this date has been copied to the Restarts subdirectory
+      -- You may add more restart files using format GEOSChem.Restart.YYYYMMDD_HHmmz.nc4
+      -- Change simulation start and end dates in configuration file geoschem_config.yml
+      -- Default frequency and duration of diagnostics are set to monthly
+      -- Modify diagnostic settings in HISTORY.rc and HEMCO_Config.rc
 
    |br|
 
-#. The last menu will prompt you with:
+#. The next menu will prompt you with:
 
    .. code-block:: console
 
@@ -271,10 +280,45 @@ GEOS-Chem full-chemistry simulation.
 
    Type :command:`y` and then :command:`ENTER`. Then you will be able to
    track changes that you make to GEOS-Chem configuration files with
-   Git. This can be a lifesaver when debugging -- you can revert to an
-   earlier state and then start fresh. |br|
+   Git. This can be a lifesaver when debugging---you can revert to an
+   earlier state and then start fresh.
+
+   You will then see this output:
+
+   .. code-block:: console
+
+      Initialized empty Git repository in /path/to/gc_4x5_merra2_fullchem/.git/
+
    |br|
 
-#. The script will display the full path to the run directory. You
-   can navigate there and then start editing the :ref:`GEOS-Chem
+#. The next (and final) menu will ask you:
+
+   .. code-block:: console
+
+      -----------------------------------------------------------
+      Do you want to build the KPP-Standalone Box Model? (y/n)
+      -----------------------------------------------------------
+      >>>
+
+
+   Type :program:`y` and then :command:`ENTER` you wish to build the
+   :program:`KPP-Standalone Box Model`, or :program:`n` then
+   :program:`ENTER` to skip this step. If you choose to build
+   KPP-Standalone, you will be given this reminder:
+
+   .. code-block:: console
+
+      >>>> REMINDER: You must compile with options: -DKPPSA=y <<<<
+
+   Please see the Supplemental Guide entitled :ref:`kppsa-guide`
+   for further usage instructions.
+
+   Lastly, you will see a message to indicate that run directory
+   creation has completed successfully.
+
+   .. code-block:: console
+
+      Created /path/to/gc_4x5_merra2_fullchem
+
+   You may now navigate to this directory and start editing the :ref:`GEOS-Chem
    configuration files <cfg>`.
